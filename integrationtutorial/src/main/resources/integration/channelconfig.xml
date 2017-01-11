@@ -17,35 +17,64 @@
 		<int:queue capacity="1001" />
 	</int:channel>
     <int:poller default="true" fixed-delay="50" />
+
 	<int:channel id="errorChannel">
 		<int:queue capacity="500"/>
 	</int:channel>
+
 	<int:channel id="customErrorChannel">
 		<int:queue capacity="500"/>
 	</int:channel>
+
+	<int:channel id="plainErrorChannel">
+		<int:queue capacity="500"/>
+	</int:channel>
+
+	<int:channel id="plainCustomErrorChannel">
+		<int:queue capacity="500"/>
+	</int:channel>
+
 	<int:channel id="responseChannel">
 		<int:queue capacity="500"/>
 	</int:channel>
+
 	<bean name="errorThrowingService" class="za.co.absa.integration.ErrorThrowingService"/>
+
+	<bean name="errorUnwrapperService" class="za.co.absa.integration.ErrorUnwrapperService"/>
 
 	<int:service-activator
 			input-channel="channel"
 			output-channel="responseChannel"
 			ref="errorThrowingService"
-			method="highlight"/>
+			method="highlight">
+	</int:service-activator>
 
+	<int:service-activator
+			input-channel="errorChannel"
+			output-channel="plainErrorChannel"
+			ref="errorUnwrapperService"
+			method="unwrap">
+	</int:service-activator>
+
+	<int:service-activator
+			input-channel="customErrorChannel"
+			output-channel="plainCustomErrorChannel"
+			ref="errorUnwrapperService"
+			method="unwrap">
+	</int:service-activator>
 
 	<int-file:outbound-channel-adapter
 		channel="responseChannel"
-		directory="file:///configs/channels/out"
+		directory="file:///tmp/configs/channels/out"
 		/>
 
 	<int-file:outbound-channel-adapter
-		channel="customErrorChannel"
-		directory="file:///configs/channels/custom-error"
+		channel="plainCustomErrorChannel"
+		directory="file:///tmp/configs/channels/custom-error"
 		/>
+
 	<int-file:outbound-channel-adapter
-		channel="errorChannel"
-		directory="file:///configs/channels/global-error"
+		channel="plainErrorChannel"
+		directory="file:///tmp/configs/channels/global-error"
 		/>
 </beans>
