@@ -24,5 +24,12 @@
 		<int:queue capacity="500"/>
 	</int:channel>
 
+	<bean name="errorThrowingService" class="za.co.absa.integration.ErrorThrowingService"/>
+
+	<int:service-activator
+			input-channel="channel"
+			output-channel="responseChannel"
+			ref="errorThrowingService"
+			method="highlight"/>
 
 </beans>
