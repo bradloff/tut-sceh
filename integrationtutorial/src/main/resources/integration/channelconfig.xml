@@ -12,7 +12,7 @@
 	<context:annotation-config />
 
 	<int:channel id="channel">
-		<int:queue capacity="10" />
+		<int:queue capacity="1001" />
 	</int:channel>
 	<int:channel id="errorChannel">
 		<int:queue capacity="500"/>
