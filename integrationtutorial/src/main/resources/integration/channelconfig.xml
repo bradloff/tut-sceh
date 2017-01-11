@@ -14,5 +14,15 @@
 	<int:channel id="channel">
 		<int:queue capacity="10" />
 	</int:channel>
+	<int:channel id="errorChannel">
+		<int:queue capacity="500"/>
+	</int:channel>
+	<int:channel id="customErrorChannel">
+		<int:queue capacity="500"/>
+	</int:channel>
+	<int:channel id="responseChannel">
+		<int:queue capacity="500"/>
+	</int:channel>
+
 
 </beans>
