@@ -1,6 +1,7 @@
 package za.co.absa.integration;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.PollableChannel;
 import org.springframework.messaging.support.GenericMessage;
@@ -14,11 +15,11 @@ import java.util.Random;
 
 public class Publisher {
 
-    public void startPublishService(PollableChannel channel){
+    public void startPublishService(MessageChannel channel, MessageChannel errorChannel){
         Random random = new Random();
 
         HashMap<String, Object> headers = new HashMap<String, Object>();
-        headers.put(MessageHeaders.ERROR_CHANNEL,"customErrorChannel");
+        headers.put(MessageHeaders.ERROR_CHANNEL,errorChannel);
         GenericMessage msg;
         for( int i=1; i <= 100; i++){
             String textMessage = "This is message number " + i;

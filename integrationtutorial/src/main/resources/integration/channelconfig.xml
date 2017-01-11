@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans
-	xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:int="http://www.springframework.org/schema/integration"
-	xsi:schemaLocation=
-	   "http://www.springframework.org/schema/beans           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-		http://www.springframework.org/schema/context         http://www.springframework.org/schema/context/spring-context-3.0.xsd
-		http://www.springframework.org/schema/integration     http://www.springframework.org/schema/integration/spring-integration.xsd">
+		xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:int="http://www.springframework.org/schema/integration"
+		xmlns:int-file="http://www.springframework.org/schema/integration/file"
+		xsi:schemaLocation=
+				"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd">
 
 	<context:annotation-config />
 
@@ -24,14 +26,6 @@
 	<int:channel id="responseChannel">
 		<int:queue capacity="500"/>
 	</int:channel>
-    <bean id="myservice" class="za.co.absa.integration.ErrorThrowingService" />
-	<int:service-activator
-			input-channel="channel"
-			output-channel="responseChannel"
-			ref="myservice"
-			method="highlight"/>
-
-
 	<bean name="errorThrowingService" class="za.co.absa.integration.ErrorThrowingService"/>
 
 	<int:service-activator
@@ -40,4 +34,18 @@
 			ref="errorThrowingService"
 			method="highlight"/>
 
+
+	<int-file:outbound-channel-adapter
+		channel="responseChannel"
+		directory="file:///configs/channels/out"
+		/>
+
+	<int-file:outbound-channel-adapter
+		channel="customErrorChannel"
+		directory="file:///configs/channels/custom-error"
+		/>
+	<int-file:outbound-channel-adapter
+		channel="errorChannel"
+		directory="file:///configs/channels/global-error"
+		/>
 </beans>

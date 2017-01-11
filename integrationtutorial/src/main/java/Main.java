@@ -1,4 +1,5 @@
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.PollableChannel;
 import za.co.absa.integration.Publisher;
 
@@ -11,9 +12,10 @@ public class Main {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("integration/channelconfig.xml");
 
         // Get the channel.
-        PollableChannel channel = ctx.getBean("channel", PollableChannel.class);
+        MessageChannel channel = ctx.getBean("channel", MessageChannel.class);
+        MessageChannel errorChannel = ctx.getBean("customErrorChannel", MessageChannel.class);
 
-        new Publisher().startPublishService(channel);
+        new Publisher().startPublishService(channel, errorChannel);
 
 
     }

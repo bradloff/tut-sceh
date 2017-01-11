@@ -11,9 +11,10 @@ public class ErrorThrowingService {
 
     public String highlight(String s) {
         if (random.nextBoolean()) {
+            System.out.println("Exception coming");
             throw new RuntimeException("Error from service");
         }
-
+        System.out.println(s);
         return ">>>>>" + s + "<<<<<";
     }
 
