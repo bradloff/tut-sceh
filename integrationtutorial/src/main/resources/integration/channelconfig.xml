@@ -12,7 +12,7 @@
 	<context:annotation-config />
 
 	<int:channel id="channel">
-		<int:queue capacity="10" />
+		<int:queue capacity="1001" />
 	</int:channel>
     <int:poller default="true" fixed-delay="50" />
 	<int:channel id="errorChannel">
@@ -32,5 +32,12 @@
 			method="highlight"/>
 
 
+	<bean name="errorThrowingService" class="za.co.absa.integration.ErrorThrowingService"/>
+
+	<int:service-activator
+			input-channel="channel"
+			output-channel="responseChannel"
+			ref="errorThrowingService"
+			method="highlight"/>
 
 </beans>
